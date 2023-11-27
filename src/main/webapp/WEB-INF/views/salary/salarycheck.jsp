@@ -48,25 +48,26 @@
 				<div class="col-12">
 					<h2><strong>급여조회</strong></h2>
 					<li>급여내역을 기준연월, 성명, 사원번호, 부서명으로 검색할 수 있습니다.</li>
+					<li>급여목록의 행을 선택하여 해당 사원의 급여명세를 확인할 수 있습니다.</li>
 				</div>
 			</div>
 			<hr>
 			<div class="row mt-3">
 				<div class="col-12">
 					<form id="salary-search" class="row row-cols-sm-auto g-3 align-items-center float-end" action="/salary/salarycheck">
-						<label>기준연월</label> <input type="month" name="basemonth" value="${param.basemonth }"/> &nbsp; 
+						<label>기준연월</label> <input type="month" style="height: 30px" name="baseYearMonth" value="${param.baseYearMonth }"/> &nbsp; 
 						<div class="col-12">
-							<select class="form-select" name="opt">
+							<select name="opt" style="height: 30px">
 								<option value="empName" ${param.opt == 'empName' ? 'selected' : '' }>성명</option>
-								<option value="empNo" ${param.opt == 'empNo' ? 'selected' : '' }>사원번호</option>
+								<option value="employeeNo" ${param.opt == 'employeeNo' ? 'selected' : '' }>사원번호</option>
 								<option value="dept" ${param.opt == 'dept' ? 'selected' : '' }>부서명</option>
 							</select>
 						</div>
 						<div class="col-12">
-							<input type="text" class="form-control" size="10" name="keyword" value="${param.keyword }"/>
+							<input type="text" style="height: 30px" size="10" name="keyword" value="${param.keyword }"/>
 						</div>	
 						<div class="col-12">
-							<button type="submit" class="btn btn-danger btn-sm" id="btn-search">검색</button>
+							<button type="submit" class="btn btn-danger btn-sm" style="height: 30px" id="btn-search">검색</button>
 						</div>
 					</form>	
 				</div>	
@@ -215,20 +216,20 @@
 <script>
 $(function() {
 	
-	$("input[name=basemonth]").change(function() {
+	$("input[name=baseYearMonth]").change(function() {
 		$("#salary-search").trigger("submit")
 	})
 	
-	$("#salary-list tr").click(function(event) {
-		clearTable();
-		event.preventDefault();
+	$("#salary-list tr").click(function() {
+		//clearTable();
+		//event.preventDefault();
 		let tr = $(this);
 		tr.addClass("table-primary").siblings().removeClass("table-primary");
 		
 		let no = $(this).find("td:nth(1)").text();
 		let date = $(this).find("td:nth(0)").text();
 	
-		$.getJSON('/salary/salaryDetail', {empNo : no, paydate : date}, function(salary) { 
+		$.getJSON('/salary/salaryDetail', {employeeNo : no, payDate : date}, function(salary) { 
 			let baseSalary = new Number(salary.baseSalary).toLocaleString()
 			$("#base-salary").text(baseSalary);
 			let incomeTax = new Number(salary.incomeTax).toLocaleString()

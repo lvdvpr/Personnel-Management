@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SalaryBookDto {
+public class SalaryBookDto {  // 전체 사원의 급여별 합계
 
 	private List<SalaryDto> salaryDtoLists;
 	
-	public int getBaseSalaryTtl() {                  // 사원들의 기본급 합계
+	public int getBaseSalaryTtl() {                  // 기간별 사원들의 총기본급 합계
 		int total = 0;
 		for (SalaryDto dto : salaryDtoLists) {
 			total += dto.getBaseSalary();
@@ -18,7 +18,7 @@ public class SalaryBookDto {
 		return total;
 	}
 	
-	public int getMealSalaryTtl() {                 // 사원들의 식대 합계
+	public int getMealSalaryTtl() {                 // 기간별 사원들의 총식대 합계
 		int total = 0;
 		for (SalaryDto dto : salaryDtoLists) {
 			total += dto.getMealSalary();
@@ -26,7 +26,7 @@ public class SalaryBookDto {
 		return total;
 	}
 	
-	public int getOvertimeSalaryTtl() {             // 사원들의 연장수당 합계 
+	public int getOvertimeSalaryTtl() {             // 기간별 사원들의 총연장수당 합계 
 		int total = 0;
 		for (SalaryDto dto : salaryDtoLists) {
 			total += dto.getOvertimeSalary();

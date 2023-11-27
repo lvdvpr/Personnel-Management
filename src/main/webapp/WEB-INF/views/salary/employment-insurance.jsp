@@ -38,7 +38,8 @@
 			<div class="row">
 				<div class="col-12">
 					<h2><strong>고용보험 조회</strong></h2>
-					<li>사원별 고용보험 납입내역을 확인합니다.</li>
+					<li>사원별 고용보험 납입내역을 확인할 수 있습니다.</li>
+					<li>기준년도, 성명, 사원번호, 부서명으로 검색할 수 있습니다.</li>
 				</div>   
 			</div>
 			<div class="row mt-3">
@@ -60,19 +61,19 @@
 				<div class="col-12">
 					<form id="salary-search" class="row row-cols-sm-auto g-3 align-items-center float-end" action="/salary/employment-insurance">
 						<label>기준년도</label>
-						<select name="baseYear" style="height: 36px"></select> &nbsp; 
+						<select name="baseYear" style="height: 30px"></select> &nbsp; 
 						<div class="col-12">
-							<select class="form-select" name="opt">
-								<option value="empName">성명</option>
-								<option value="empNo">사원번호</option>
-								<option value="dept">부서명</option>
+							<select name="opt" style="height: 30px">
+								<option value="empName" ${param.opt == 'empName' ? 'selected' : '' }>성명</option>
+								<option value="employeeNo" ${param.opt == 'employeeNo' ? 'selected' : '' }>사원번호</option>
+								<option value="dept" ${param.opt == 'dept' ? 'selected' : '' }>부서명</option>
 							</select>
 						</div>
 						<div class="col-12">
-							<input type="text" class="form-control" size="10" name="keyword" value="${param.keyword }"/>
-						</div>		
+							<input type="text" size="10" style="height: 30px" name="keyword" value="${param.keyword }"/>
+						</div>	
 						<div class="col-12">
-							<button type="submit" class="btn btn-danger btn-sm" id="btn-search">검색</button>
+							<button type="submit" class="btn btn-danger btn-sm" style="height: 30px" id="btn-search">검색</button>
 						</div>
 					</form>	
 				</div>	
@@ -175,7 +176,7 @@ $(function() {
 		$.ajax({
 			type : 'GET',
 			url: '/salary/contributionDetail',
-			data: {empNo : no, baseYear : year},
+			data: {employeeNo : no, baseYear : year},
 			dataType: 'json',
 			success: function(employmentArray) {
 				$.each(employmentArray, function(index, employment) {

@@ -51,7 +51,8 @@
 			<div class="row">
 				<div class="col-12">
 					<h2><strong>기간별 급여현황</strong></h2>
-					<li>기간별 급여 현황을 확인할 수 있습니다.</li>
+					<li>급여총계에서는 선택한 급여기간 내 사원별 급여총액을 확인할 수 있습니다.</li>
+					<li>급여상세내역에서는 선택한 급여기간 내 전체 사원의 급여종류별 합계를 확인할 수 있습니다.</li>
 				</div>
 			</div>
 			<div class="row mt-3">
@@ -69,8 +70,8 @@
 			<div class="row mt-3 text-end">
 				<div class="col-12">
 					<form id="salary-search" action="/salary/salaryperiod">
-						<label>급여기간</label> <input type="date" name="startdate" value="${param.startdate }"/> ~ 
-						<input type="date" name="enddate" value="${param.enddate }"/> &nbsp; 
+						<label>급여기간</label> <input type="date" name="startDate" value="${param.startDate }"/> ~ 
+						<input type="date" name="endDate" value="${param.endDate }"/> &nbsp; 
 						<button type="button" class="btn btn-danger btn-sm" id="btn-search">검색</button>
 					</form>
 				</div>
@@ -213,15 +214,27 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
 $(function() {
+	let $startDate = $("input[name=startDate]");
+	let $endDate = $("input[name=endDate]");
+	
+	$endDate.change(function(){
+		if($startDate.val() == "") {
+			alert("시작일자를 먼저 선택하세요.");
+			$endDate.val("");
+		}
+		if($startDate.val() > $endDate.val()) {
+			alert("종료일자가 시작일자보다 이른 날짜일 수 없습니다.");
+			$endDate.val("");
+		}
+	})
+	
 	$("#btn-search").click(function() {
-		let startdate = $("input[name=startdate]").val();
-		if (startdate == "") {
-			alert("급여시작기간을 선택하세요.");
+		if ($startDate.val() == "") {
+			alert("시작일자를 선택하세요.");
 			return false;
 		}
-		let enddate = $("input[name=enddate]").val();
-		if (enddate == "") {
-			alert("급여마감기간을 선택하세요.");
+		if ($endDate.val() == "") {
+			alert("종료일자를 선택하세요.");
 			return false;
 		}
 		$("#salary-search").trigger("submit");

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Alias("contributionDto")
 @Setter
 @Getter
-public class SalaryContribution {
+public class SalaryContributionDto {
 
 	private int employeeNo;
 	private int baseSalary;
@@ -22,10 +22,10 @@ public class SalaryContribution {
 	private int longtermInsurance;
 	private int employmentInsurance;
 	private String payDate;
-	private double pensionEmployeeRate;
-	private double healthEmployeeRate;
-	private double longtermEmployeeRate;
-	private double employmentEmployeeRate;
+	private double pensionEmployeeRate;     // 국민연금 요율
+	private double healthEmployeeRate;		// 건강보험 요율
+	private double longtermEmployeeRate;	// 장기요양보험 요율
+	private double employmentEmployeeRate;	// 고용보험 요율
 	
 	public double getBaseIncome() {    		// 기준소득월액
 		double baseIncome = baseSalary + overtimeSalary + nightSalary + holidaySalary 

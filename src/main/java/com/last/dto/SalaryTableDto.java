@@ -1,15 +1,11 @@
 package com.last.dto;
 
-import java.util.List;
-
-import org.apache.ibatis.type.Alias;
-
+import java.util.List; 
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-@Alias("salaryTableDto")
 public class SalaryTableDto {
 	
 	private List<SalaryDto> salaryDtoLists;            

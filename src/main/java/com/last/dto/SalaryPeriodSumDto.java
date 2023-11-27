@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SalaryPeriodSumDto {
+public class SalaryPeriodSumDto {   // 기간별 급여현황-급여총계의 합계
 
 	private List<SalaryPeriodDto> salaryPeriodDtos;
 	

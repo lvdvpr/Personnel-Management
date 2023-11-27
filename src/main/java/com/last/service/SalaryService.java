@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.last.dto.SalaryDto;
-import com.last.dto.SalaryContribution;
+import com.last.dto.SalaryContributionDto;
 import com.last.dto.SalaryPeriodDto;
 import com.last.mapper.SalaryMapper;
 import com.last.vo.PayBankInfo;
@@ -20,30 +20,30 @@ public class SalaryService {
 	private SalaryMapper salaryMapper;
 	
 	// 급여대상 
-	public List<SalaryDto> getSalaryDtos(String basemonth) {
+	public List<SalaryDto> getSalaryDtos(String baseYearMonth) {
 		
-		List<SalaryDto> salaryDtos = salaryMapper.getSalaryLists(basemonth);
+		List<SalaryDto> salaryDtos = salaryMapper.getSalaryLists(baseYearMonth);
 		
 		return salaryDtos;
 	}
 
 	// 사원 급여 정보 가져오기
-	public SalaryDto getCalculatedSalaryDto(int empNo, String basemonth) {
+	public SalaryDto getCalculatedSalaryDto(int employeeNo, String baseYearMonth) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("empNo", empNo);
-		param.put("basemonth", basemonth);
+		param.put("employeeNo", employeeNo);
+		param.put("baseYearMonth", baseYearMonth);
 		SalaryDto salaryDto = salaryMapper.getCalculatedSalaryDto(param);
 		
 		return salaryDto;
 	}
 	
 	// 급여내역 없는 사원의 기본정보 가져오기
-	public PayBankInfo getBasicSalaryInfo(int empNo, String basemonth) {
+	public PayBankInfo getBasicSalaryInfo(int employeeNo, String baseYearMonth) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("empNo", empNo);
-		param.put("basemonth", basemonth);
+		param.put("employeeNo", employeeNo);
+		param.put("baseYearMonth", baseYearMonth);
 		PayBankInfo payBankInfo = salaryMapper.getBasicSalaryInfo(param);
 		
 		return payBankInfo;
@@ -53,30 +53,37 @@ public class SalaryService {
 	public SalaryDto saveSalary (SalaryDto salaryDetail) {
 		salaryMapper.insertSalary(salaryDetail);
 		
-		return salaryMapper.getCalculatedSalaryByNo(salaryDetail.getEmployeeNo(), salaryDetail.getBaseYearMonth());
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("employeeNo", salaryDetail.getEmployeeNo());
+		param.put("baseYearMonth", salaryDetail.getBaseYearMonth());
+		SalaryDto salaryDto = salaryMapper.getCalculatedSalaryDto(param);
+		
+		return salaryDto;
 	}
 	
 	// 급여수정
 	public SalaryDto updateSalary (SalaryDto salaryDetail) {
 		salaryMapper.updateSalary(salaryDetail);
 		
-		return salaryMapper.getCalculatedSalaryByNo(salaryDetail.getEmployeeNo(), salaryDetail.getBaseYearMonth());
-	}
-	
-	// 급여삭제
-	public SalaryDto deleteSalary(int empNo, String basemonth) {
-		SalaryDto salaryDto = salaryMapper.getCalculatedSalaryByNo(empNo, basemonth);
-		salaryMapper.deleteSalary(empNo, basemonth);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("employeeNo", salaryDetail.getEmployeeNo());
+		param.put("baseYearMonth", salaryDetail.getBaseYearMonth());
+		SalaryDto salaryDto = salaryMapper.getCalculatedSalaryDto(param);
 		
 		return salaryDto;
 	}
 	
+	// 급여삭제
+	public void deleteSalary(int employeeNo, String baseYearMonth) {
+		salaryMapper.deleteSalary(employeeNo, baseYearMonth);
+	}
+	
 	// 급여조회
-	public List<SalaryDto> getSalaryDtoLists(String basemonth, String opt, String keyword) {
+	public List<SalaryDto> getSalaryDtoLists(String baseYearMonth, String opt, String keyword) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		if (!basemonth.isBlank()) {
-			param.put("basemonth", basemonth);			
+		if (!baseYearMonth.isBlank()) {
+			param.put("baseYearMonth", baseYearMonth);			
 		}
 		if (!opt.isBlank() && !keyword.isBlank()) {
 			param.put("opt", opt);
@@ -88,22 +95,22 @@ public class SalaryService {
 	}
 	
 	// 급여조회 - 사원 급여 명세 가져오기
-	public SalaryDto getSalaryDetailDto(int empNo, String paydate) {
+	public SalaryDto getSalaryDetailDto(int employeeNo, String payDate) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("empNo", empNo);
-		param.put("paydate", paydate);
+		param.put("employeeNo", employeeNo);
+		param.put("payDate", payDate);
 		SalaryDto salaryDto = salaryMapper.getSalaryDetailDto(param);
 
 		return salaryDto;
 	}
 	
 	// 급여대장
-	public List<SalaryDto> getSalaryBookLists(String basemonth) {
+	public List<SalaryDto> getSalaryBookLists(String baseYearMonth) {
 		
 		Map<String,Object> param = new HashMap<String, Object>();
-		if (!basemonth.isBlank()) {
-			param.put("basemonth", basemonth);			
+		if (!baseYearMonth.isBlank()) {
+			param.put("baseYearMonth", baseYearMonth);			
 		}
 		List<SalaryDto> salaryDtoLists = salaryMapper.getSalaryHistories(param);
 		
@@ -111,14 +118,14 @@ public class SalaryService {
 	}
 	
 	// 기간별 급여현황 - 급여총계
-	public List<SalaryPeriodDto> getPeriodDtoLists(String startdate, String enddate) {
+	public List<SalaryPeriodDto> getPeriodDtoLists(String startDate, String endDate) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		if (!startdate.isBlank()) {
-			param.put("startdate", startdate);			
+		if (!startDate.isBlank()) {
+			param.put("startDate", startDate);			
 		}
-		if (!enddate.isBlank()) {
-			param.put("enddate", enddate);			
+		if (!endDate.isBlank()) {
+			param.put("endDate", endDate);			
 		}
 		List<SalaryPeriodDto> periodDtoLists = salaryMapper.getPeriodDtoLists(param);
 		
@@ -126,14 +133,14 @@ public class SalaryService {
 	}
 	
 	// 기간별 급여현황 - 급여 상세내역
-	public List<SalaryDto> getPeriodDetails(String startdate, String enddate) {
+	public List<SalaryDto> getPeriodDetails(String startDate, String endDate) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		if (!startdate.isBlank()) {
-			param.put("startdate", startdate);			
+		if (!startDate.isBlank()) {
+			param.put("startDate", startDate);			
 		}
-		if (!enddate.isBlank()) {
-			param.put("enddate", enddate);			
+		if (!endDate.isBlank()) {
+			param.put("endDate", endDate);			
 		}
 		List<SalaryDto> periodDetailLists = salaryMapper.getPeriodDetails(param);
 		
@@ -158,12 +165,12 @@ public class SalaryService {
 	}
 	
 	// 국민연금, 건강보험, 고용보험 납입내역
-	public List<SalaryContribution> getContributionDetails(int empNo, String baseYear) {
+	public List<SalaryContributionDto> getContributionDetails(int employeeNo, String baseYear) {
 		
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("empNo", empNo);
+		param.put("employeeNo", employeeNo);
 		param.put("baseYear", baseYear);
-		List<SalaryContribution> pensionDto = salaryMapper.getContributionDetails(param);
+		List<SalaryContributionDto> pensionDto = salaryMapper.getContributionDetails(param);
 		
 		return pensionDto;
 	}

@@ -1,11 +1,8 @@
 package com.last.vo;
 
-import org.apache.ibatis.type.Alias; 
-
 import lombok.Getter;
 import lombok.Setter;
 
-@Alias("salaryHistories")
 @Setter
 @Getter
 public class SalaryHistories {

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.last.dto.SalaryBookDto;
 import com.last.dto.SalaryDto;
-import com.last.dto.SalaryContribution;
+import com.last.dto.SalaryContributionDto;
 import com.last.dto.SalaryPeriodDto;
 import com.last.dto.SalaryPeriodSumDto;
 import com.last.dto.SalaryTableDto;
@@ -32,10 +32,10 @@ public class SalaryController {
 	private SalaryService salaryService;
 	
 	@GetMapping("/salarycalculate")       // 급여대상
-	public String salarycalculate (@RequestParam(name="basemonth", required=false) String basemonth, Model model) {
+	public String getSalaryList(@RequestParam(name="baseYearMonth", required=false) String baseYearMonth, Model model) {
 		
-		if (basemonth != null) {
-			List<SalaryDto> salaryDtoLists = salaryService.getSalaryDtos(basemonth);
+		if (baseYearMonth != null) {
+			List<SalaryDto> salaryDtoLists = salaryService.getSalaryDtos(baseYearMonth);
 			SalaryTableDto tableDto = new SalaryTableDto();
 			tableDto.setSalaryDtoLists(salaryDtoLists);
 			model.addAttribute("TableDto", tableDto);
@@ -44,18 +44,18 @@ public class SalaryController {
 		return "salary/salarycalculate";
 	}
 
-	@GetMapping("/calculateDetail")     // 사원 급여 정보 가져오기
+	@GetMapping("/calculatedSalary")     // 사원 급여 정보 가져오기
 	@ResponseBody
-	public SalaryDto calculateDetail(@RequestParam("empNo") int empNo, @RequestParam("basemonth") String basemonth) {
-		SalaryDto salaryDto = salaryService.getCalculatedSalaryDto(empNo, basemonth);
+	public SalaryDto getCalculatedSalary(@RequestParam("employeeNo") int employeeNo, @RequestParam("baseYearMonth") String baseYearMonth) {
+		SalaryDto salaryDto = salaryService.getCalculatedSalaryDto(employeeNo, baseYearMonth);
 		
 		return salaryDto;
 	}
 	
 	@GetMapping("/basicInfo")     // 급여내역 없는 사원의 기본정보
 	@ResponseBody
-	public PayBankInfo basicInfo(@RequestParam("empNo") int empNo, @RequestParam("basemonth") String basemonth) {
-		PayBankInfo payBankInfo = salaryService.getBasicSalaryInfo(empNo, basemonth);
+	public PayBankInfo getBasicSalaryInfo(@RequestParam("employeeNo") int employeeNo, @RequestParam("baseYearMonth") String baseYearMonth) {
+		PayBankInfo payBankInfo = salaryService.getBasicSalaryInfo(employeeNo, baseYearMonth);
 		
 		return payBankInfo;
 	}
@@ -63,36 +63,32 @@ public class SalaryController {
 	@PostMapping("/saveSalary")       // 급여저장
 	@ResponseBody
 	public SalaryDto saveSalary(@RequestBody SalaryDto salaryDetail) {
+		SalaryDto salaryDto = salaryService.saveSalary(salaryDetail);
 		
-		salaryService.saveSalary(salaryDetail);
-		
-		return salaryDetail;
+		return salaryDto;
 	}
 	
 	@PutMapping("/updateSalary")     // 급여수정
 	@ResponseBody
 	public SalaryDto updateSalary(@RequestBody SalaryDto salaryDetail) {
-		
-		salaryService.updateSalary(salaryDetail);
-		
-		return salaryDetail;
-	}
-	
-	@GetMapping("/deleteSalary") 	 // 급여삭제
-	@ResponseBody
-	public SalaryDto deleteSalary(@RequestParam("empNo") int empNo, @RequestParam("basemonth") String basemonth) {
-		SalaryDto salaryDto = salaryService.deleteSalary(empNo, basemonth);
+		SalaryDto salaryDto = salaryService.updateSalary(salaryDetail);
 		
 		return salaryDto;
 	}
 	
+	@GetMapping("/deleteSalary") 	 // 급여삭제
+	@ResponseBody
+	public void deleteSalary(@RequestParam("employeeNo") int employeeNo, @RequestParam("baseYearMonth") String baseYearMonth) {
+		salaryService.deleteSalary(employeeNo, baseYearMonth);
+	}
+	
 	@GetMapping("/salarycheck")			// 급여조회
-	public String salarycheck(@RequestParam(name="basemonth", required=false) String basemonth, 
+	public String checkSalary(@RequestParam(name="baseYearMonth", required=false) String baseYearMonth, 
 							  @RequestParam(name="opt", required=false) String opt, 
 							  @RequestParam(name="keyword", required=false) String keyword, Model model) {
 		
-		if (basemonth != null) {
-			List<SalaryDto> salaryDtoLists = salaryService.getSalaryDtoLists(basemonth, opt, keyword);
+		if (baseYearMonth != null) {
+			List<SalaryDto> salaryDtoLists = salaryService.getSalaryDtoLists(baseYearMonth, opt, keyword);
 			if (!salaryDtoLists.isEmpty()) {
 				SalaryTableDto tableDto = new SalaryTableDto();
 				tableDto.setSalaryDtoLists(salaryDtoLists);
@@ -105,17 +101,17 @@ public class SalaryController {
 	
 	@GetMapping("/salaryDetail")     // 급여조회-사원별 상세 급여내역 
 	@ResponseBody
-	public SalaryDto salaryDetail(@RequestParam("empNo") int empNo, @RequestParam("paydate") String paydate) {
-		SalaryDto salaryDto = salaryService.getSalaryDetailDto(empNo, paydate);
+	public SalaryDto getSalaryDetail(@RequestParam("employeeNo") int employeeNo, @RequestParam("payDate") String payDate) {
+		SalaryDto salaryDto = salaryService.getSalaryDetailDto(employeeNo, payDate);
 		
 		return salaryDto;
 	}
 	
 	@GetMapping("/salarybook")      // 급여대장
-	public String salarybook(@RequestParam(name="basemonth", required=false) String basemonth, Model model) {
+	public String getSalaryBook(@RequestParam(name="baseYearMonth", required=false) String baseYearMonth, Model model) {
 		
-		if (basemonth != null) {
-			List<SalaryDto> salaryDtoLists = salaryService.getSalaryBookLists(basemonth);
+		if (baseYearMonth != null) {
+			List<SalaryDto> salaryDtoLists = salaryService.getSalaryBookLists(baseYearMonth);
 			if (!salaryDtoLists.isEmpty()) {
 				SalaryBookDto bookDto = new SalaryBookDto();
 				bookDto.setSalaryDtoLists(salaryDtoLists);
@@ -127,16 +123,16 @@ public class SalaryController {
 	}
 	
 	@GetMapping("/salaryperiod")      // 기간별 급여현황 - 급여총계, 급여상세내역
-	public String salaryperiod(@RequestParam(name="startdate", required=false) String startdate, 
-			 				   @RequestParam(name="enddate", required=false) String enddate, Model model) {
+	public String getSalaryByPeriod(@RequestParam(name="startDate", required=false) String startDate, 
+			 				   @RequestParam(name="endDate", required=false) String endDate, Model model) {
 		
-		if (startdate != null && enddate != null) {
-			List<SalaryPeriodDto> periodDtoLists = salaryService.getPeriodDtoLists(startdate, enddate);
+		if (startDate != null && endDate != null) {
+			List<SalaryPeriodDto> periodDtoLists = salaryService.getPeriodDtoLists(startDate, endDate);
 			SalaryPeriodSumDto periodSumDto = new SalaryPeriodSumDto();
 			periodSumDto.setSalaryPeriodDtos(periodDtoLists);
 			model.addAttribute("SalaryPeriodSumDto", periodSumDto);
 			
-			List<SalaryDto> periodDetailLists = salaryService.getPeriodDetails(startdate, enddate);
+			List<SalaryDto> periodDetailLists = salaryService.getPeriodDetails(startDate, endDate);
 			
 			SalaryBookDto bookDto = new SalaryBookDto();
 			bookDto.setSalaryDtoLists(periodDetailLists);
@@ -164,7 +160,7 @@ public class SalaryController {
 	}
 	
 	@GetMapping("/health-insurance")      // 건강보험 기본정보
-	public String healthInsurance(@RequestParam(name="baseYear", required=false, defaultValue="") String baseYear, 
+	public String getHealthInsurance(@RequestParam(name="baseYear", required=false, defaultValue="") String baseYear, 
 								  @RequestParam(name="opt", required=false, defaultValue="") String opt, 
 								  @RequestParam(name="keyword", required=false, defaultValue="") String keyword, Model model) {
 		if (baseYear != null) {
@@ -182,7 +178,7 @@ public class SalaryController {
 	}
 	
 	@GetMapping("/employment-insurance")      // 고용보험 기본정보
-	public String employmentInsurance(@RequestParam(name="baseYear", required=false, defaultValue="") String baseYear, 
+	public String getEmploymentInsurance(@RequestParam(name="baseYear", required=false, defaultValue="") String baseYear, 
 									  @RequestParam(name="opt", required=false, defaultValue="") String opt, 
 									  @RequestParam(name="keyword", required=false, defaultValue="") String keyword, Model model) {
 		if (baseYear != null) {
@@ -201,8 +197,8 @@ public class SalaryController {
 	
 	@GetMapping("/contributionDetail")      // 국민연금, 건강보험, 고용보험 납입내역
 	@ResponseBody
-	public List<SalaryContribution> getContributionDetails (@RequestParam("empNo") int empNo, @RequestParam("baseYear") String baseYear) {
-		List<SalaryContribution> contributionDetails = salaryService.getContributionDetails(empNo, baseYear);
+	public List<SalaryContributionDto> getContributionDetails (@RequestParam("employeeNo") int employeeNo, @RequestParam("baseYear") String baseYear) {
+		List<SalaryContributionDto> contributionDetails = salaryService.getContributionDetails(employeeNo, baseYear);
 		
 		return contributionDetails;
 	}

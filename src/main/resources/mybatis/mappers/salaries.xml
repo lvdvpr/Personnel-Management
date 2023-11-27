@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.last.mapper.SalaryMapper">
+<mapper namespace="com.last.mapper.SalaryMapper"> 
 
 	<!-- 급여계산 --> 
 	<select id="getSalaryLists" parameterType="String" resultType="salaryDto">
@@ -32,8 +32,8 @@
 	 	from
 	 		(select * 
 		     from SALARY_HISTORIES 
-		     <if test="basemonth != null">
-		     where BASE_YEAR_MONTH = #{basemonth}
+		     <if test="baseYearMonth != null">
+		     where BASE_YEAR_MONTH = #{baseYearMonth}
 		     </if>
 		     ) A , EMPLOYEES B, DEPARTMENTS C, POSITIONS D
 	 	<where>
@@ -48,11 +48,10 @@
 	 	order by B.EMPLOYEE_NO asc
 	</select>
 	
-	<!-- 사원 급여 정보 가져오기 --> 
+	<!-- 사원의 입력된 급여 정보 가져오기 --> 
 	<select id="getCalculatedSalaryDto" parameterType="map" resultType="salaryDto">
 	 	select
-	 		A.EMPLOYEE_NO				as employeeNo,
-	 		A.BASE_YEAR_MONTH     		as baseYearMonth,
+			A.BASE_YEAR_MONTH     		as baseYearMonth,
 	 		A.BASE_SALARY_TTL     		as baseSalary,
 	 		A.OVERTIME_SALARY_TTL		as overtimeSalary,
 	 		A.NIGHT_SALARY_TTL			as nightSalary,
@@ -70,20 +69,24 @@
 	 		A.START_DATE				as startDate,
 	 		A.END_DATE					as endDate,
 	 		A.PAY_DATE					as payDate,
+	 		B.EMPLOYEE_NO				as employeeNo,
 	 		B.EMPLOYEE_NAME				as name,
 	 		B.HIRE_DATE					as hireDate,
 	 		B.RETIREMENT_DATE			as retirementDate,
-	 		C.DEPT_NAME					as deptName
-	 	from
-	 		SALARY_HISTORIES A, EMPLOYEES B, DEPARTMENTS C
-	 	where
-	 		A.EMPLOYEE_NO = #{empNo}	
-	 	and
-	 		A.BASE_YEAR_MONTH = #{basemonth}	
-	 	and 
-	 		A.EMPLOYEE_NO = B.EMPLOYEE_NO
-	 	and
-	 		B.DEPT_NO = C.DEPT_NO		
+	 		C.DEPT_NAME					as deptName,
+	 		D.POSITION_NAME				as positionName
+		from
+			SALARY_HISTORIES A, EMPLOYEES B, DEPARTMENTS C, POSITIONS D
+		where
+			A.BASE_YEAR_MONTH = #{baseYearMonth}
+		and		
+			A.EMPLOYEE_NO = #{employeeNo}
+		and
+			A.EMPLOYEE_NO = B.EMPLOYEE_NO 
+		and
+			B.DEPT_NO = C.DEPT_NO	
+		and
+			B.POSITION_NO = D.POSITION_NO	
 	</select>
 	
 	<!-- 급여내역 없는 사원의 기본정보 가져오기 -->
@@ -100,11 +103,11 @@
 		from
 			salary_basic_item_info
 		where
-			employee_no = #{empNo}
+			employee_no = #{employeeNo}
 		and 
-			start_date &lt;= #{basemonth}
+			start_date &lt;= #{baseYearMonth}
 		and 
-			end_date >= #{basemonth}  	
+			end_date >= #{baseYearMonth}  	
 	</select>
 	
 	
@@ -143,47 +146,6 @@
 			EMPLOYEE_NO = #{employeeNo}
 			and BASE_YEAR_MONTH = #{baseYearMonth}
 	</update>
-	
-	<!-- 입력된 사원의 급여 가져오기 -->
-	<select id="getCalculatedSalaryByNo" resultType="salaryDto">
-		select
-			A.BASE_YEAR_MONTH     		as baseYearMonth,
-	 		A.BASE_SALARY_TTL     		as baseSalary,
-	 		A.OVERTIME_SALARY_TTL		as overtimeSalary,
-	 		A.NIGHT_SALARY_TTL			as nightSalary,
-	 		A.HOLIDAY_SALARY_TTL		as holidaySalary,
-	 		A.CARE_SALARY_TTL			as careSalary,
-	 		A.REWARD_SALARY_TTL			as rewardSalary,
-	 		A.MEAL_TTL					as mealSalary,
-	 		A.BUSINESS_SALARY_TTL		as businessSalary,
-	 		A.INCOME_TAX_TTL			as incomeTax,
-	 		A.RESIDENCE_TAX_TTL			as residenceTax,
-	 		A.PENSION_TTL				as pension,
-	 		A.HEALTH_INSURANCE_TTL		as healthInsurance,
-	 		A.LONGTERM_INSURANCE_TTL	as longtermInsurance,
-	 		A.EMPLOYMENT_INSURANCE_TTL	as employmentInsurance,
-	 		A.START_DATE				as startDate,
-	 		A.END_DATE					as endDate,
-	 		A.PAY_DATE					as payDate,
-	 		B.EMPLOYEE_NO				as employeeNo,
-	 		B.EMPLOYEE_NAME				as name,
-	 		B.HIRE_DATE					as hireDate,
-	 		B.RETIREMENT_DATE			as retirementDate,
-	 		C.DEPT_NAME					as deptName,
-	 		D.POSITION_NAME				as positionName
-		from
-			SALARY_HISTORIES A, EMPLOYEES B, DEPARTMENTS C, POSITIONS D
-		where
-			A.BASE_YEAR_MONTH = #{baseYearMonth}
-		and		
-			A.EMPLOYEE_NO = #{employeeNo}
-		and
-			A.EMPLOYEE_NO = B.EMPLOYEE_NO 
-		and
-			B.DEPT_NO = C.DEPT_NO	
-		and
-			B.POSITION_NO = D.POSITION_NO	
-	</select>
 	
 	<!-- 급여삭제 -->
 	<delete id="deleteSalary">
@@ -229,12 +191,12 @@
 			    B.DEPT_NO = C.DEPT_NO	
 			and
 			    B.POSITION_NO = D.POSITION_NO	
-	 		<if test="basemonth != null">
-		 		and	A.PAY_DATE like '%' || #{basemonth} || '%'
+	 		<if test="baseYearMonth != null">
+		 		and	A.PAY_DATE like '%' || #{baseYearMonth} || '%'
 	 		</if>
 			<if test="opt != null and keyword != null">		
 		 	<choose>
-		 		<when test="opt == 'empNo'">
+		 		<when test="opt == 'employeeNo'">
 		 			and A.EMPLOYEE_NO like '%' || #{keyword} || '%'
 		 		</when>
 		 		<when test="opt == 'empName'">
@@ -246,7 +208,7 @@
 		 	</choose>
 		 	</if>	
 	 	</where>
-	 	order by B.EMPLOYEE_NO asc
+	 	order by B.EMPLOYEE_NO asc, A.PAY_DATE desc
 	</select>
 	
 	<!-- 급여조회 - 사원 급여 명세 가져오기 -->
@@ -278,9 +240,9 @@
 	 	from
 	 		SALARY_HISTORIES A, EMPLOYEES B, DEPARTMENTS C
 	 	where
-	 		A.EMPLOYEE_NO = #{empNo}	
+	 		A.EMPLOYEE_NO = #{employeeNo}	
 	 	and
-	 		A.PAY_DATE = #{paydate}	
+	 		A.PAY_DATE = #{payDate}	
 	 	and 
 	 		A.EMPLOYEE_NO = B.EMPLOYEE_NO
 	 	and
@@ -301,11 +263,11 @@
 	 		SALARY_HISTORIES A , EMPLOYEES B
 	 	<where>
 			A.EMPLOYEE_NO = B.EMPLOYEE_NO 
-			<if test="startdate != null">
-		 		and A.PAY_DATE >= #{startdate}
+			<if test="startDate != null">
+		 		and A.PAY_DATE >= #{startDate}
 	 		</if>
-	 		<if test="enddate != null">
-		 		and	A.PAY_DATE &lt;= #{enddate}
+	 		<if test="endDate != null">
+		 		and	A.PAY_DATE &lt;= #{endDate}
 	 		</if>
 	 	</where>
 	 	group by B.EMPLOYEE_NO, B.EMPLOYEE_NAME
@@ -315,9 +277,9 @@
 	<!-- 기간별 급여현황 - 급여 상세내역 -->
 	<select id="getPeriodDetails" parameterType="map" resultType="salaryDto">
 		with months 
-		as (select to_char(add_months(to_date(#{startdate}), level-1), 'yyyy-mm') baseYearMonth
+		as (select to_char(add_months(to_date(#{startDate}), level-1), 'yyyy-mm') baseYearMonth
 		from dual
-		connect by add_months(to_date(#{startdate}), level-1) &lt;=  to_date(#{enddate}))
+		connect by add_months(to_date(#{startDate}), level-1) &lt;=  to_date(#{endDate}))
 		select  A.baseYearMonth baseYearMonth, 
 		        nvl(B.baseSalary, 0) baseSalary, 
 		        nvl(B.mealSalary, 0) mealSalary, 
@@ -349,7 +311,7 @@
 		                       sum(longterm_insurance_ttl) longtermInsurance,
 		                       sum(employment_insurance_ttl) employmentInsurance
 		                from salary_histories
-		                where pay_date >= #{startdate} and pay_date &lt;= #{enddate}
+		                where pay_date >= #{startDate} and pay_date &lt;= #{endDate}
 		                group by base_year_month) B
 		where A.baseYearMonth = B.base_year_month(+)
 		order by A.baseYearMonth asc
@@ -372,7 +334,7 @@
 	 		</if>
 			<if test="opt != null and keyword != null">		
 		 	<choose>
-		 		<when test="opt == 'empNo'">
+		 		<when test="opt == 'employeeNo'">
 		 			and A.EMPLOYEE_NO like '%' || #{keyword} || '%'
 		 		</when>
 		 		<when test="opt == 'empName'">
@@ -410,7 +372,7 @@
 	 	from
 	 		SALARY_HISTORIES A, INSURANCE_CONTRIBUTIONS B
 	 	where
-	 		A.EMPLOYEE_NO = #{empNo}	
+	 		A.EMPLOYEE_NO = #{employeeNo}	
 		and	
 			A.PAY_DATE like '%' || #{baseYear} || '%'
 		and

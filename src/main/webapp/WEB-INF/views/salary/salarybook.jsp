@@ -73,7 +73,7 @@
 			<form id="salary-table" action="/salary/salarybook">
 				<div class="row mt-3 text-end">
 					<div class="col-12">
-						<label>기준연월</label> <input type="month" name="basemonth" value="${param.basemonth }"/> &nbsp; 
+						<label>기준연월</label> <input type="month" name="baseYearMonth" value="${param.baseYearMonth }"/> &nbsp; 
 					</div>
 				</div>
 				<div class="row mt-3">
@@ -184,7 +184,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
 $(function() {
-	$("input[name=basemonth]").change(function() {
+	$("input[name=baseYearMonth]").change(function() {
 		$("#salary-table").trigger("submit")
 	})
 })

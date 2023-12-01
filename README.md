@@ -1,7 +1,7 @@
 Personnel-Management
 ======================================
 
-# 프로젝트 소개
+## 프로젝트 소개
 
 사내 인사/근태/급여관리 기능을 포함한 인사관리프로그램입니다.
 
@@ -18,3 +18,4 @@ Personnel-Management
 - Version Control : Git/Github
 - Build Tool : Maven
 
+## 담당기능

@@ -38,14 +38,17 @@ Personnel-Management
 
 ### 3. 급여대장
 <img width="60%" src="https://github.com/lvdvpr/Personnel-Management/assets/116501324/545beb56-8c3e-4d05-ac7c-535ccd26c97b"/>
+
 - 기준연월을 선택하여 급여 내역이 있는 전체 사원의 급여 세부 정보와 합계를 확인할 수 있습니다.
 - 스크롤 기능을 사용하여 페이지 이동 없이 한 페이지에서 확인할 수 있습니다.
 
 ### 4. 기간별 급여현황
 <img width="60%" src="https://github.com/lvdvpr/Personnel-Management/assets/116501324/ad68f09a-1c2d-44ea-b300-501ea37bf263"/>
+
 - 급여 총계에서는 급여기간을 지정하여 사원별 급여 총액을 조회할 수 있습니다.
 - 급여 상세내역에서는 지정한 급여기간 동안의 급여 종류별 합계를 월별로 확인할 수 있습니다.
 
 ### 5. 국민연금/건강보험/고용보험
 <img width="60%" src="https://github.com/lvdvpr/Personnel-Management/assets/116501324/6ddcbb2d-ad3b-4136-9b3d-c886698b8c85)"/>
+
 - 기준년도, 성명, 사원번호, 부서명으로 국민연금, 건강보험, 고용보험 납입내역을 검색할 수 있습니다.

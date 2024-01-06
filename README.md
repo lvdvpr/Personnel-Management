@@ -17,6 +17,9 @@ Personnel-Management
 - Version Control : Git/Github
 - Build Tool : Maven
 
+## ERD
+![ERD](https://github.com/lvdvpr/Personnel-Management/assets/116501324/46b3c50b-d49a-4dbd-b72f-abef9019287d)
+
 ## 담당기능
 ### 1. 급여입력
 ![급여입력](https://github.com/lvdvpr/Personnel-Management/assets/116501324/20d356ac-90b6-43d7-ae6f-76b8097fae83)|![급여수정,삭제](https://github.com/lvdvpr/Personnel-Management/assets/116501324/c49ca95d-81d6-46b2-9ea5-0175f3d77457)

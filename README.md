@@ -26,11 +26,11 @@ Personnel-Management
 :---:|:---:
 급여저장|급여수정,삭제
 - 재직 중인 사원들의 급여를 입력하고 저장, 수정, 삭제할 수 있습니다.
-- 급여가 저장되지 않은 사원을 선택하면, 급여입력 칸에 해당 사원의 기본급이 자동으로 출력됩니다.
-- 급여가 이미 저장된 사원을 선택하면, 급여입력 칸에 기존에 저장한 급여가 출력되며, 이를 수정하거나 삭제할 수 있습니다.
+- [ajax를 사용해서](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L328-L340) 급여가 저장되지 않은 사원을 선택하면, 급여입력 칸에 해당 사원의 기본급이 자동으로 출력됩니다.
+- [ajax를 사용해서](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L278-L326) 급여가 이미 저장된 사원을 선택하면, 급여입력 칸에 기존에 저장한 급여가 출력되며, 이를 수정하거나 삭제할 수 있습니다.
 - 자동합계 버튼을 클릭하면, 급여입력 테이블의 지급총액과 공제총액이 계산되어 출력됩니다.
 - 날짜 입력을 누락하거나 종료일자를 시작일자보다 빠른 날짜로 입력하는 경우, 유효성 검사를 실행합니다.
-- 급여 저장, 수정, 삭제 버튼을 클릭하면, 지급총액, 공제총액, 실지급액, 합계 금액이 변경됩니다.
+- [ajax를 사용해서](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L439-L536) 급여 저장, 수정, 삭제 버튼을 클릭하면, 지급총액, 공제총액, 실지급액, 합계 금액이 변경됩니다.
 - 지급총액과 공제총액은 SalaryDto 안에서 getter메소드로 지급항목과 공제항목들을 더하여 구현하였고, 사원들의 지급총액, 공제총액, 실지급액을 각각 모두 더한 합계는 SalaryTableDto 안에서 SalaryDto를 List타입의 멤버변수로 넣고, getter메소드에서 향상된 for문을 이용하여 합계를 구현하였습니다.
 - 관련 주요 코드 : [JSP](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp), [Controller](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/web/contoller/SalaryController.java#L34-L83), [Service](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/service/SalaryService.java#L22-L79), [SQL](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L5-L157), DTO - [SalaryDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryDto.java), [SalaryTableDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryTableDto.java)
 
@@ -39,7 +39,7 @@ Personnel-Management
 :---:|:---:
 급여검색|급여상세정보
 - 기준연월, 성명, 사원번호, 부서명으로 급여내역을 검색할 수 있습니다.
-- 급여목록의 행을 클릭하면, 해당하는 사원의 급여 세부 내역이 급여명세서에 출력됩니다.
+- [ajax를 사용](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycheck.jsp#232-265)해서 급여목록의 행을 클릭하면, 해당하는 사원의 급여 세부 내역이 급여명세서에 출력됩니다.
 - 관련 주요 코드 : [JSP](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycheck.jsp), [Controller](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/web/contoller/SalaryController.java#L85-L108), [Service](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/service/SalaryService.java#L81-L106), [SQL](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L159-L250), DTO - [SalaryDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryDto.java), [SalaryTableDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryTableDto.java)
 
 ### 3. 급여대장
@@ -54,11 +54,12 @@ Personnel-Management
 
 - 급여 총계에서는 급여기간을 지정하여 사원별 급여 총액을 조회할 수 있습니다.
 - 급여 상세내역에서는 지정한 급여기간 동안의 급여 종류별 합계를 월별로 확인할 수 있습니다.
-- 사용자가 지정한 급여기간 중 급여내역이 없는 달이 포함되어도 지정한 기간이 누락없이 연속적으로 보여질 수 있도록 [계층형쿼리](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L277-L318)를 이용하였습니다. 
+- [계층형쿼리를 사용](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L277-L318)하여 사용자가 지정한 급여기간 중 급여내역이 없는 달이 포함되어도 지정한 기간이 누락없이 연속적으로 보여질 수 있도록 하였습니다. 
 - 관련 주요 코드 : [JSP](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salaryperiod.jsp), [Controller](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/web/contoller/SalaryController.java#L125-L142), [Service](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/service/SalaryService.java#L120-L148), [SQL](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L252-L318), DTO - [SalaryDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryDto.java), [SalaryBookDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryBookDto.java), [SalaryPeriodDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryPeriodDto.java), [SalaryPeriodSumDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryPeriodSumDto.java)
 
 ### 5. 국민연금/건강보험/고용보험
 <img width="60%" src="https://github.com/lvdvpr/Personnel-Management/assets/116501324/6ddcbb2d-ad3b-4136-9b3d-c886698b8c85)"/>
 
 - 기준년도, 성명, 사원번호, 부서명으로 국민연금, 건강보험, 고용보험 납입내역을 검색할 수 있습니다.
-- 관련 주요 코드 : [JSP](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/national-pension.jsp), [Controller](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/web/contoller/SalaryController.java#L144-L204), [Service](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/service/SalaryService.java#L150-L176), [SQL](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L320-L382), DTO- [SalaryDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryDto.java), [SalaryContributionDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryContributionDto.java)
+- [ajax를 사용](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/national-pension.jsp#L176-L194)해서 기본정보에서 사원의 이름을 클릭시 해당 사원의 납입내역이 출력되도록 구현하였습니다. 
+- 관련 주요 코드 : [JSP](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/national-pension.jsp), [Controller](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/web/contoller/SalaryController.java#L144-L204), [Service](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/service/SalaryService.java#L150-L176), [SQL](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/resources/mybatis/mappers/salaries.xml#L320-L382), DTO - [SalaryDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryDto.java), [SalaryContributionDto](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/java/com/last/dto/SalaryContributionDto.java)

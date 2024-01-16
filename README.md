@@ -25,9 +25,9 @@ Personnel-Management
 ![급여입력](https://github.com/lvdvpr/Personnel-Management/assets/116501324/20d356ac-90b6-43d7-ae6f-76b8097fae83)|![급여수정,삭제](https://github.com/lvdvpr/Personnel-Management/assets/116501324/c49ca95d-81d6-46b2-9ea5-0175f3d77457)
 :---:|:---:
 급여저장|급여수정,삭제
-- [ajax를 사용해서](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L433-L536) 재직 중인 사원들의 급여를 입력하고 저장, 수정, 삭제할 수 있습니다.
-- [ajax를 사용해서](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L328-L340) 급여가 저장되지 않은 사원을 선택하면, 급여입력 칸에 해당 사원의 기본급이 자동으로 출력됩니다.
-- [ajax를 사용해서](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L278-L326) 급여가 이미 저장된 사원을 선택하면, 급여입력 칸에 기존에 저장한 급여가 출력되며, 이를 수정하거나 삭제할 수 있습니다.
+- [ajax를 사용](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L433-L536)해서 재직 중인 사원들의 급여를 입력하고 저장, 수정, 삭제할 수 있습니다.
+- [ajax를 사용](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L328-L340)해서 급여가 저장되지 않은 사원을 선택하면, 급여입력 칸에 해당 사원의 기본급이 자동으로 출력됩니다.
+- [ajax를 사용](https://github.com/lvdvpr/Personnel-Management/blob/main/src/main/webapp/WEB-INF/views/salary/salarycalculate.jsp#L278-L326)해서 급여가 이미 저장된 사원을 선택하면, 급여입력 칸에 기존에 저장한 급여가 출력되며, 이를 수정하거나 삭제할 수 있습니다.
 - 자동합계 버튼을 클릭하면, 급여입력 테이블의 지급총액과 공제총액이 계산되어 출력됩니다.
 - 날짜 입력을 누락하거나 종료일자를 시작일자보다 빠른 날짜로 입력하는 경우, 유효성 검사를 실행합니다.
 - 급여 저장, 수정, 삭제 버튼을 클릭하면, 지급총액, 공제총액, 실지급액, 합계 금액이 변경됩니다.
